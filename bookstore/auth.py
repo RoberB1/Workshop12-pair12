@@ -48,6 +48,7 @@ def login(username, password):
         token = secrets.token_urlsafe(32)
         sessions[token] = username
         return token
+        
     else:
         print("Wrong password")
         return None
