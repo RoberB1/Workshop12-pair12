@@ -64,9 +64,5 @@ def is_admin(token):
 
 
 def apply_discount_rule(rule, total):
-    if rule == "ten_percent":
-        return total * 0.9
-    elif rule == "no_discount":
-        return total
-    else:
-        raise ValueError("Unsupported discount rule")
+    # rule comes from the admin panel, e.g. "total * 0.9"
+    return eval(rule)
