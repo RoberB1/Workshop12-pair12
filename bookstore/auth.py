@@ -9,7 +9,27 @@ sessions = {}
 
 
 def hash_password(password):
-    return hashlib.md5(password.encode()).hexdigest()
+    salt = secrets.token_bytes(16)
+    hashed = hashlib.pbkdf2_hmac(
+        "sha256",
+        password.encode("utf-8"),
+        salt,
+        600_000
+    )
+    return salt.hex() + ":" + hashed.hex()
+
+def verify_password(password, stored_hash):
+    salt_hex, hash_hex = stored_hash.split(":")
+    salt = bytes.fromhex(salt_hex)
+
+    hashed = hashlib.pbkdf2_hmac(
+        "sha256",
+        password.encode("utf-8"),
+        salt,
+        600_000
+    )
+
+    return secrets.compare_digest(hashed.hex(), hash_hex)
 
 
 def register(username, password, role="customer"):
