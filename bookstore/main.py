@@ -26,7 +26,7 @@ def main():
 
     admin_token = auth.login("admin", "admin123")
     print("Is admin: " + str(auth.is_admin(admin_token)))
-    print("Discounted: " + str(auth.apply_discount_rule("total * 0.9", 100)))
+    print("Discounted: " + str(auth.apply_discount_rule("ten_percent", 100)))
     orders.cancel_order(1)
 
 
