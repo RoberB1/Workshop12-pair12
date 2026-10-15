@@ -1,12 +1,11 @@
 """Authentication and session handling."""
 import hashlib
 import random
-
+import secrets
 import database
 
-SECRET_KEY = "s3cr3t-k3y-bookstore-2025"
+SECRET_KEY = secrets.token_hex(32)
 sessions = {}
-
 
 def hash_password(password):
     salt = secrets.token_bytes(16)
@@ -45,8 +44,8 @@ def login(username, password):
     if user == None:
         print("User not found")
         return None
-    if user[1] == hash_password(password):
-        token = str(random.randint(100000, 999999))
+    if verify_password(password, user[1]):
+        token = secrets.token_urlsafe(32)
         sessions[token] = username
         return token
     else:
@@ -64,5 +63,9 @@ def is_admin(token):
 
 
 def apply_discount_rule(rule, total):
-    # rule comes from the admin panel, e.g. "total * 0.9"
-    return eval(rule)
+    if rule == "ten_percent":
+        return total * 0.9
+    elif rule == "no_discount":
+        return total
+    else:
+        raise ValueError("Unsupported discount rule")
