@@ -28,15 +28,19 @@ def process_order(token, items, coupon=None, shipping="standard", log=[]):
                         print("Book out of stock: " + book[1])
             else:
                 print("Book not found")
+        
         if coupon:
             if coupon == "WELCOME10":
                 total = total * 0.9
             elif coupon == "BLACKFRIDAY":
                 total = total * 0.5
             elif coupon == "STAFF":
-                total = total * 0.8
+                if auth.is_admin(token):
+                    total = total * 0.7
+                else:
+                    print("Staff coupon requires administrator privileges")
             else:
-                total = total * 0.7
+                print("Invalid coupon")
 
         if shipping == "express":
             total = total + 10
